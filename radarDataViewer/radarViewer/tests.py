@@ -11,7 +11,8 @@ class RadarFileModelTestCase(unittest.TestCase):
 
     ####################### models test case###########
 
-    # Check that the timestamped_file_path function correctly generates a file path with a timestamp.
+    # Test the timestamped_file_path function to ensure it generates
+    # a file path with a correct timestamp in the format uploads/YYYYMMDDHHMMSS_filename.
     def test_timestamped_file_path(self):
         # Mock an instance and a filename
         mock_instance = None
@@ -20,6 +21,7 @@ class RadarFileModelTestCase(unittest.TestCase):
         # Generate the file path
         file_path = timestamped_file_path(mock_instance, filename)
 
+        # Get the current timestamp in the expected format
         current_time = datetime.datetime.now()
         formatted_timestamp = current_time.strftime('%Y%m%d%H%M%S')
         
@@ -29,7 +31,8 @@ class RadarFileModelTestCase(unittest.TestCase):
         self.assertTrue(file_path.startswith("uploads/"), "File path should start with 'uploads/'.")
         self.assertTrue(file_path.endswith(".SORT"), "File extension should remain the same.")
     
-    # Check that the RadarFile model properly handles file uploads.    
+    # Test the RadarFile model to validate proper file handling,
+    # including saving and reading uploaded files and populating the uploaded_at field.  
     def test_radar_file_model(self):
         # Create a dummy file
         test_file = SimpleUploadedFile(
@@ -47,9 +50,8 @@ class RadarFileModelTestCase(unittest.TestCase):
         # Clean up
         radar_file.file.delete()
 
-    # Validates the __str__ method of the RadarFile model.
-    # A dummy file is uploaded.
-    # The test checks that the string representation of the RadarFile instance is the file's name.
+    # Test the __str__ method of the RadarFile model to ensure the string representation
+    # matches the file's name.
     def test_radar_file_str_method(self):
         # Create a dummy file
         test_file = SimpleUploadedFile(
@@ -91,7 +93,8 @@ class TestUtils(unittest.TestCase):
             dms_to_decimal(dms_str)
     
     ##### Base 64 Testing #####
-
+    
+    # Test the generate_images_base64 function with valid image data.
     def test_generate_images_base64_valid_input(self):
         # Create a valid 3D numpy array with random values
         data = np.random.rand(5, 64, 64)  # 5 images, each 64x64
@@ -153,9 +156,3 @@ class TestUtils(unittest.TestCase):
             self.assertTrue(image_base64.startswith("data:image/png;base64,"))
 
         
-
-# filepath empty
-# header empty
-#
-#
-#
