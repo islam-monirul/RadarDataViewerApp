@@ -11,6 +11,7 @@ class RadarFileModelTestCase(unittest.TestCase):
 
     ####################### models test case###########
 
+    # Check that the timestamped_file_path function correctly generates a file path with a timestamp.
     def test_timestamped_file_path(self):
         # Mock an instance and a filename
         mock_instance = None
@@ -28,6 +29,7 @@ class RadarFileModelTestCase(unittest.TestCase):
         self.assertTrue(file_path.startswith("uploads/"), "File path should start with 'uploads/'.")
         self.assertTrue(file_path.endswith(".SORT"), "File extension should remain the same.")
     
+    # Check that the RadarFile model properly handles file uploads.    
     def test_radar_file_model(self):
         # Create a dummy file
         test_file = SimpleUploadedFile(
@@ -45,6 +47,9 @@ class RadarFileModelTestCase(unittest.TestCase):
         # Clean up
         radar_file.file.delete()
 
+    # Validates the __str__ method of the RadarFile model.
+    # A dummy file is uploaded.
+    # The test checks that the string representation of the RadarFile instance is the file's name.
     def test_radar_file_str_method(self):
         # Create a dummy file
         test_file = SimpleUploadedFile(
