@@ -126,24 +126,28 @@ def register(request):
         return Response({'token': token.key, 'user': serializer.data, "message" : "User created Succesfully"})
     return Response(serializer.errors, status=status.HTTP_200_OK)
 
-########################## Not working
-########################## Not working
-########################## Not working
 @api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def update_user(request):
-    user = request.user
-    serializer = UpdateUserSerializer(user, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        # user = User.objects.get(username=request.data['username'])
-        # user.set_password(request.data['password'])
-        # user.save()
-        # token = Token.objects.create(user=user)
-        return Response({'user': serializer.data, "message" : "Updated User info Succesfully"})
-    return Response(serializer.errors, status=status.HTTP_200_OK)
-########################## Not working
-########################## Not working
-########################## Not working
+    try:
+        user = request.user  # Authenticated user
+        serializer = UpdateUserSerializer(user, data=request.data, partial=True)  # Allow partial updates
+        if serializer.is_valid():
+            serializer.save()
+
+            # Check if password update is included
+            if 'password' in request.data:
+                user.set_password(request.data['password'])
+                user.save()
+
+            return Response({'user': serializer.data, "message": "Updated User info successfully"}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    except Exception as e:
+        logger.error(f"Error updating user: {e}")
+        return Response({"message": "An error occurred while updating user information."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])

@@ -9,10 +9,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name','last_name','username', 'password', 'email', "is_staff", "is_superuser"]
         # fields = ['id', 'username', 'password', 'email']
 
-class UpdateUserSerializer(serializers.ModelSerializer):
-    class Meta(object):
-        model = User 
-        fields = ['id', 'first_name','last_name','username', 'password', 'email', "is_staff", "is_superuser"]
+#class UpdateUserSerializer(serializers.ModelSerializer):
+#    class Meta(object):
+#        model = User 
+#        fields = ['id', 'first_name','last_name','username', 'password', 'email', "is_staff", "is_superuser"]
 #         {
 #     "username": "adam",
 #      "password": "Pass1234!",
@@ -20,3 +20,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 #      "first_name" : "adam",
 #      "last_name" : "john"
 # }
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        extra_kwargs = {'password': {'write_only': True, 'required': False}}
